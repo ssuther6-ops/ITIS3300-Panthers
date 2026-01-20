@@ -1,0 +1,9 @@
+Group Name: Panthers
+
+Member who created file:
+Sam Suther
+
+Skills:
+- Programming (Java, Python)
+- Web Development (HTML, CSS, JavaScript)
+- Basic Database Concepts
