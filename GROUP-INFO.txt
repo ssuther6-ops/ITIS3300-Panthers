@@ -7,3 +7,9 @@ Skills:
 - Programming (Java, Python)
 - Web Development (HTML, CSS, JavaScript)
 - Basic Database Concepts
+
+- Will Armentrout
+
+Skills:
+- Programming (Java, Python, C++)
+- Web and App design (Android Studio, HTML)
