@@ -13,3 +13,12 @@ Skills:
 Skills:
 - Programming (Java, Python, C++)
 - Web and App design (Android Studio, HTML)
+
+- Brian Trramuel
+
+Skills:
+-Programming (Java)
+-Web Development (HTML, CSS, JavaScript)
+-Basic Database Concepts
+-UX/UI (Figma, Prototyping, Research, and Testing)
+
