@@ -22,3 +22,8 @@ Skills:
 -Basic Database Concepts
 -UX/UI (Figma, Prototyping, Research, and Testing)
 
+- Isaac Vunzi
+
+Skills:
+-Programming(Java & C++)
+-Web Development ( HTML ) 
