@@ -27,3 +27,11 @@ Skills:
 Skills:
 -Programming(Java & C++)
 -Web Development ( HTML ) 
+
+-Sana Ullah
+
+Skills:
+-Programming (C++, Java)
+-Web Development (HTML, CSS, Javascript)
+-Mobile Application development (Xcode )
+-Basic Database Concept
