@@ -1,0 +1,32 @@
+Panthers – Online Library Management System
+
+Team Name: Panthers
+
+Team Members:
+- Isaac Vunzi
+- Brian Tramuel
+- Sam Suther
+- Will Armentrout
+- Sana Ullah
+
+Project Description:
+This project involves developing an online library management system with an
+integrated database to track books, user accounts, and library transactions.
+The system manages book availability, associates borrowed books with user
+accounts, records checkout and return dates, and supports the full borrowing
+and return workflow.
+
+Project Directory Structure:
+
+├── src/                //Source code for the application
+│   ├── backend/
+│   ├── frontend/
+│   └── database/
+│
+├── docs/               //Planning and documentation
+│   ├── planning/
+│   ├── meeting-minutes/
+│   └── reports/
+│
+├── README.md
+└── .gitignore
