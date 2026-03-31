@@ -14,3 +14,17 @@
 * Pool - a group of reusable DB connections
 * PG - the node postgres library used to talk to PostgreSQL
 * .env - file where DB credentials are stored (won't commit to Git)
+
+const { Pool } = require('pg');
+require('dotenv').config();
+
+const pool = new Pool({
+  host: process.env.DB_HOST || 'localhost',
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || 'olms',
+  user: process.env.DB_USER || 'postgres',
+  password: process.env.DB_PASSWORD || '',
+});
+
+module.exports = pool;
+
