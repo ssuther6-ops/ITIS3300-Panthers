@@ -19,3 +19,36 @@
  * How to Run
  *   node backend/server.js
  */
+
+const express = require('express');
+const path = require('path');
+require('dotenv').config();
+
+const authRoutes = require('../auth/authRoutes');
+const bookRoutes = require('./routes/books');
+const userRoutes = require('./routes/users');
+const borrowRoutes = require('./routes/borrow');
+ 
+const app = express();
+const PORT = process.env.PORT || 3000;
+ 
+// Middleware
+app.use(express.json());
+app.use(express.static(path.join(__dirname, '../frontend')));
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/books', bookRoutes);
+app.use('/api/users', userRoutes);
+app.use('/api/borrow', borrowRoutes);
+ 
+// Serve frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../frontend/index.html'));
+});
+ 
+app.listen(PORT, () => {
+  console.log(`OLMS server running on port ${PORT}`);
+});
+ 
+module.exports = app;
