@@ -1,13 +1,12 @@
-/* Dark Academia Library Theme */
+/* Master Stylesheet - Dark Academia */
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Georgia', serif; /* Serif fonts feel more like a book */
+    font-family: 'Georgia', serif;
 }
 
 body {
-    /* High-res library background with a dark overlay to make text readable */
     background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), 
                 url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2000&auto=format&fit=crop');
     background-size: cover;
@@ -15,91 +14,143 @@ body {
     background-attachment: fixed;
     height: 100vh;
     display: flex;
+    flex-direction: column;
+}
+
+/* NAVIGATION */
+.top-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 5%;
+    width: 100%;
+}
+
+.nav-logo {
+    color: #d4af37; /* Gold Logo */
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+    font-weight: normal;
+}
+
+.nav-link {
+    color: #f4f1ea;
+    text-decoration: none;
+    margin-left: 20px;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+}
+
+.gold-btn {
+    border: 1px solid #d4af37;
+    padding: 8px 15px;
+    border-radius: 2px;
+    color: #d4af37;
+}
+
+/* LAYOUT */
+.center-content {
+    flex: 1;
+    display: flex;
     justify-content: center;
     align-items: center;
+    padding: 20px;
 }
 
 .auth-container {
-    background: #1a1a1a; /* Solid dark charcoal */
-    border: 1px solid #d4af37; /* Gold border accent */
-    padding: 3rem;
-    border-radius: 4px; /* Sharper corners for a classic look */
+    background: #1a1a1a;
+    border: 1px solid #d4af37;
+    padding: 2.5rem;
+    border-radius: 4px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
     text-align: center;
+    color: #f4f1ea;
 }
 
+/* FORMS & INPUTS */
 h2 {
+    color: #d4af37;
     margin-bottom: 2rem;
-    color: #d4af37; /* Gold headings */
-    font-size: 2.2rem;
     font-weight: normal;
     letter-spacing: 1px;
 }
 
 .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.2rem;
     text-align: left;
 }
 
 label {
     display: block;
-    margin-bottom: 0.5rem;
-    font-size: 0.85rem;
-    color: #f4f1ea; /* Old paper white */
+    margin-bottom: 0.4rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    color: #f4f1ea;
 }
 
 input {
     width: 100%;
-    padding: 0.8rem;
+    padding: 10px;
     background: #2a2a2a;
     border: 1px solid #444;
-    border-radius: 2px;
     color: white;
+    border-radius: 2px;
     outline: none;
-    transition: border 0.3s;
 }
 
 input:focus {
-    border-color: #d4af37; /* Gold focus border */
+    border-color: #d4af37;
 }
 
+/* SEARCH SPECIFIC */
+.search-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1rem;
+}
+
+/* BUTTONS */
 button {
     width: 100%;
-    padding: 1rem;
-    margin-top: 1rem;
-    background-color: #d4af37;
+    padding: 12px;
+    background: #d4af37;
     color: #1a1a1a;
     border: none;
-    border-radius: 2px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 2px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: 0.3s;
 }
 
 button:hover {
-    background-color: #f1c40f;
+    background: #f1c40f;
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
 }
 
+.search-group button {
+    width: auto;
+}
+
+/* LINKS */
 p, a {
-    margin-top: 1.5rem;
+    margin-top: 1rem;
     color: #f4f1ea;
     font-size: 0.9rem;
-    text-decoration: none;
 }
 
 a {
     color: #d4af37;
-    font-style: italic;
+    text-decoration: none;
 }
 
 a:hover {
     text-decoration: underline;
+}
+
+#statusText {
+    font-style: italic;
+    opacity: 0.8;
 }
