@@ -9,21 +9,43 @@
 <body>
     <header class="top-nav">
         <h1 class="nav-logo">Panthers Library</h1>
-        <nav>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
             <a href="login.html" class="nav-link">Login</a>
             <a href="register.html" class="nav-link gold-btn">Register</a>
-        </nav>
+        </div>
     </header>
 
-    <main class="center-content">
-        <div class="auth-container">
-            <h2>Search Library</h2>
+    <main class="center-content-column">
+        <div class="auth-container search-box">
+            <h2>Find a Book</h2>
             <div class="search-group">
-                <input type="text" id="searchInput" placeholder="Search by title or author...">
+                <input type="text" id="searchInput" placeholder="Search title, author, or ISBN...">
                 <button id="searchBtn">Search</button>
             </div>
-            <p id="statusText">Ready to browse the collection.</p>
+            <p id="statusText">Search 5,000+ volumes in the Panther collection.</p>
         </div>
+
+        <section class="featured-section">
+            <h3 class="section-title">Staff Favorites</h3>
+            <div class="book-grid">
+                <div class="book-card">
+                    <div class="book-placeholder"></div>
+                    <h4>The Great Gatsby</h4>
+                    <p>F. Scott Fitzgerald</p>
+                </div>
+                <div class="book-card">
+                    <div class="book-placeholder"></div>
+                    <h4>1984</h4>
+                    <p>George Orwell</p>
+                </div>
+                <div class="book-card">
+                    <div class="book-placeholder"></div>
+                    <h4>The Hobbit</h4>
+                    <p>J.R.R. Tolkien</p>
+                </div>
+            </div>
+        </section>
     </main>
 
     <script src="main.js"></script>
