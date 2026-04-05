@@ -22,3 +22,7 @@ CREATE TABLE books (
     status VARCHAR(30) DEFAULT 'available',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+UPDATE users
+SET role = 'admin'
+WHERE username = 'sana';
