@@ -2,17 +2,14 @@ const pool = require('../backend/db');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-// Password validation function
 function validatePassword(password) {
   const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
   return regex.test(password);
 }
 
-// Register Controller
 const register = async (req, res) => {
   let { name, email, username, password } = req.body;
 
-  // Trim inputs
   name = name?.trim();
   email = email?.trim().toLowerCase();
   username = username?.trim();
@@ -21,7 +18,6 @@ const register = async (req, res) => {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  // 🔐 Password validation (YOUR MAIN CONTRIBUTION)
   if (!validatePassword(password)) {
     return res.status(400).json({
       error:
@@ -30,9 +26,8 @@ const register = async (req, res) => {
   }
 
   try {
-    // Check if user exists
     const exists = await pool.query(
-      'SELECT id FROM users WHERE email=$1 OR username=$2',
+      'SELECT id FROM users WHERE email = $1 OR username = $2',
       [email, username]
     );
 
@@ -42,26 +37,25 @@ const register = async (req, res) => {
       });
     }
 
-    // Hash password
     const hash = await bcrypt.hash(password, 12);
 
-    // Insert user
     const result = await pool.query(
-      'INSERT INTO users (name, email, username, password_hash, role) VALUES ($1,$2,$3,$4,$5) RETURNING id, username, role',
+      `INSERT INTO users (name, email, username, password_hash, role)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id, name, email, username, role`,
       [name, email, username, hash, 'user']
     );
 
     return res.status(201).json({
-      message: 'Account created',
+      message: 'Account created successfully',
       user: result.rows[0],
     });
   } catch (err) {
-    console.error(err);
+    console.error('Register error:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 };
 
-// Login Controller
 const login = async (req, res) => {
   let { username, password } = req.body;
 
@@ -75,7 +69,7 @@ const login = async (req, res) => {
 
   try {
     const result = await pool.query(
-      'SELECT * FROM users WHERE username=$1',
+      'SELECT * FROM users WHERE username = $1',
       [username]
     );
 
@@ -95,7 +89,6 @@ const login = async (req, res) => {
       });
     }
 
-    // Ensure JWT secret exists
     if (!process.env.JWT_SECRET) {
       return res.status(500).json({
         error: 'JWT secret is not configured',
@@ -109,21 +102,46 @@ const login = async (req, res) => {
         role: user.role,
       },
       process.env.JWT_SECRET,
-      { expiresIn: '1800s' }
+      { expiresIn: '30m' }
     );
 
-    return res.json({
+    return res.status(200).json({
+      message: 'Login successful',
       token,
       user: {
         id: user.id,
+        name: user.name,
+        email: user.email,
         username: user.username,
         role: user.role,
       },
     });
   } catch (err) {
-    console.error(err);
+    console.error('Login error:', err);
     return res.status(500).json({ error: 'Server error' });
   }
 };
 
-module.exports = { register, login };
+const getProfile = async (req, res) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, name, email, username, role FROM users WHERE id = $1',
+      [req.user.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    return res.status(200).json(result.rows[0]);
+  } catch (err) {
+    console.error('Profile error:', err);
+    return res.status(500).json({ error: 'Server error' });
+  }
+};
+
+module.exports = {
+  register,
+  login,
+  getProfile,
+};
