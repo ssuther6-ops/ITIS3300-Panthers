@@ -26,11 +26,31 @@
                 <div class="form-group">
                     <label>Password</label>
                     <input type="password" id="reg-password" required>
+                    
+                    <!-- Password Strength Indicator -->
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span class="strength-text" id="strengthText"></span>
+                    </div>
+                    
+                    <!-- Password Requirements Checklist -->
+                    <ul class="password-requirements" id="passwordRequirements">
+                        <li id="req-length"><span class="req-icon">○</span> At least 8 characters</li>
+                        <li id="req-upper"><span class="req-icon">○</span> One uppercase letter</li>
+                        <li id="req-lower"><span class="req-icon">○</span> One lowercase letter</li>
+                        <li id="req-number"><span class="req-icon">○</span> One number</li>
+                        <li id="req-special"><span class="req-icon">○</span> One special character</li>
+                    </ul>
                 </div>
-                <button type="submit">Create Account</button>
+                
+                <button type="submit" id="registerBtn" disabled>Create Account</button>
+                <p id="registerError" class="error-message"></p>
             </form>
             <p>Already a member? <a href="login.html">Login here</a></p>
         </div>
     </main>
+    <script src="main.js"></script>
 </body>
 </html>
