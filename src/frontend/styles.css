@@ -5,7 +5,6 @@
     padding: 0;
     font-family: 'Georgia', serif;
 }
-
 body {
     background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), 
                 url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?q=80&w=2000&auto=format&fit=crop');
@@ -17,7 +16,6 @@ body {
     flex-direction: column;
     color: #f4f1ea;
 }
-
 /* NAVIGATION */
 .top-nav {
     display: flex;
@@ -27,9 +25,7 @@ body {
     background: rgba(0,0,0,0.4);
     border-bottom: 1px solid rgba(212, 175, 55, 0.3);
 }
-
 .nav-logo { color: #d4af37; font-size: 1.6rem; letter-spacing: 2px; }
-
 .nav-links .nav-link {
     color: #f4f1ea;
     text-decoration: none;
@@ -38,13 +34,10 @@ body {
     font-size: 0.8rem;
     letter-spacing: 1px;
 }
-
 .gold-btn { border: 1px solid #d4af37; padding: 8px 18px; color: #d4af37; }
-
 /* LAYOUT */
 .center-content { flex: 1; display: flex; justify-content: center; align-items: center; padding: 40px; }
 .center-content-column { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 60px 20px; }
-
 /* CONTAINERS */
 .auth-container {
     background: #1a1a1a;
@@ -56,34 +49,27 @@ body {
     text-align: center;
 }
 .search-box { margin-bottom: 50px; }
-
 /* FORMS */
 h2 { color: #d4af37; margin-bottom: 1.5rem; font-weight: normal; }
 .form-group { margin-bottom: 1.2rem; text-align: left; }
 label { display: block; margin-bottom: 5px; font-size: 0.75rem; text-transform: uppercase; color: #d4af37; }
-
 input {
     width: 100%; padding: 12px; background: #2a2a2a; border: 1px solid #444; color: white; outline: none;
 }
 input:focus { border-color: #d4af37; }
-
 .search-group { display: flex; gap: 10px; }
-
 button {
     background: #d4af37; color: #1a1a1a; border: none; padding: 12px 20px; font-weight: bold; text-transform: uppercase; cursor: pointer; transition: 0.3s;
 }
 button:hover { background: #f1c40f; transform: translateY(-2px); }
-
 /* FEATURED GRID */
 .featured-section { width: 100%; max-width: 1000px; text-align: center; }
 .section-title { color: #f4f1ea; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 3px; font-size: 1.2rem; }
-
 .book-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 30px;
 }
-
 .book-card {
     background: rgba(255, 255, 255, 0.05);
     padding: 15px;
@@ -91,7 +77,6 @@ button:hover { background: #f1c40f; transform: translateY(-2px); }
     transition: 0.3s;
 }
 .book-card:hover { border-color: #d4af37; background: rgba(255, 255, 255, 0.1); }
-
 .book-placeholder {
     height: 300px;
     background: #2a2a2a;
@@ -102,15 +87,85 @@ button:hover { background: #f1c40f; transform: translateY(-2px); }
     align-items: center;
     border-bottom: 2px solid #d4af37;
 }
-
 .book-placeholder img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
-
 .book-card h4 { font-size: 1.1rem; color: #d4af37; margin-bottom: 5px; }
 .book-card p { font-size: 0.85rem; font-style: italic; opacity: 0.8; }
-
 p, a { margin-top: 1rem; color: #f4f1ea; }
 a { color: #d4af37; text-decoration: none; }
+
+/* PASSWORD STRENGTH INDICATOR  */
+.password-strength {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.strength-bar {
+    flex: 1;
+    height: 6px;
+    background: #2a2a2a;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.strength-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    border-radius: 3px;
+}
+
+.strength-text {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    min-width: 60px;
+}
+
+.password-requirements {
+    list-style: none;
+    margin-top: 12px;
+    padding: 0;
+    font-size: 0.8rem;
+}
+
+.password-requirements li {
+    padding: 4px 0;
+    color: #888;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s ease;
+}
+
+.password-requirements li.met {
+    color: #4ade80;
+}
+
+.password-requirements li .req-icon {
+    font-size: 0.9rem;
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    min-height: 20px;
+}
+
+button:disabled {
+    background: #555;
+    color: #999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+button:disabled:hover {
+    background: #555;
+    transform: none;
+}
