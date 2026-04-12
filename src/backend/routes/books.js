@@ -15,7 +15,7 @@
 const express = require('express');
 const router = express.Router();
 const { getBooks, getBookById, addBook, updateBook, deleteBook } = require('../controllers/bookController');
-const { authenticate, adminOnly } = require('../middleware/auth');
+const { authenticateToken: authenticate, requireAdmin: adminOnly } = require('../../auth/auth');
 
 router.get('/', getBooks);
 router.get('/:id', getBookById);

@@ -14,7 +14,7 @@
 const express = require('express');
 const router = express.Router();
 const { borrowBook, returnBook, myBooks } = require('../controllers/borrowController');
-const { authenticate } = require('../middleware/auth');
+const { authenticateToken: authenticate, requireAdmin: adminOnly } = require('../../auth/auth');
 
 router.post('/', authenticate, borrowBook);
 router.post('/return', authenticate, returnBook);

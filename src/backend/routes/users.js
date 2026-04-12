@@ -14,7 +14,7 @@
 const express = require('express');
 const router = express.Router();
 const { getAllUsers, deactivateUser, getBorrowHistory } = require('../controllers/userController');
-const { authenticate, adminOnly } = require('../middleware/auth');
+const { authenticateToken: authenticate, requireAdmin: adminOnly } = require('../../auth/auth');
 
 router.get('/', authenticate, adminOnly, getAllUsers);
 router.put('/:id/deactivate', authenticate, adminOnly, deactivateUser);
