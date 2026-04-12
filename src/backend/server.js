@@ -44,7 +44,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/borrow', borrowRoutes);
 
 // Frontend fallback route
-app.get('*', (req, res) => {
+app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 

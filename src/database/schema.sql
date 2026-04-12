@@ -28,8 +28,8 @@ CREATE TABLE books (
 
 CREATE TABLE borrowing_transactions (
     id SERIAL PRIMARY KEY,
-    user_id INT REFERENCES users(id) 
-    book_id INT ReFERENCES books(id) 
+    user_id INT REFERENCES users(id),
+    book_id INT ReFERENCES books(id),
     borrowed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     due_date TIMESTAMP DEFAULT (CURRENT_TIMESTAMP + INTERVAL '14 days'),
     returned_at TIMESTAMP,

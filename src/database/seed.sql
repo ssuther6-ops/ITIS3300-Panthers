@@ -11,4 +11,4 @@ INSERT INTO books (title, author, isbn, genre, total_copies, available_copies, s
 ('Lord of the Flies', 'William Golding', '9780399501487', 'Fiction', 2, 2, 'available');
 
 INSERT INTO users (name, email, username, password_hash, role) VALUES
-('Admin User', 'admin@olms.com', 'admin', '$2b$10$placeholder_hash_admin', 'admin');
+('Admin User', 'admin@olms.com', 'admin', '$2b$12$e/1BwrRhLqULe5R/uebX4ORnI7jEulZe8mDhIrduAVsTJzvg86ZKm', 'admin');
