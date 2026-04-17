@@ -34,6 +34,7 @@ const getAllUsers = async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
+    console.error('Error fetching users:', err);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -43,6 +44,7 @@ const deactivateUser = async (req, res) => {
     await pool.query('UPDATE users SET is_active = FALSE WHERE id = $1', [req.params.id]);
     res.json({ message: 'User deactivated' });
   } catch (err) {
+    console.error('Error deactivating user:', err);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -58,6 +60,7 @@ const getBorrowHistory = async (req, res) => {
     );
     res.json(result.rows);
   } catch (err) {
+    console.error('Error fetching borrow history:', err);
     res.status(500).json({ error: 'Server error' });
   }
 };
