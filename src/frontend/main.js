@@ -54,18 +54,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Update color and text
             if (metCount === 0) {
-                strengthFill.style.backgroundColor = '#2a2a2a';
+                strengthFill.style.backgroundColor = '#2a2a2a'; //Dark Grey
                 strengthText.textContent = '';
             } else if (metCount <= 2) {
-                strengthFill.style.backgroundColor = '#ef4444';
+                strengthFill.style.backgroundColor = '#ef4444'; //red
                 strengthText.textContent = 'Weak';
                 strengthText.style.color = '#ef4444';
             } else if (metCount <= 4) {
-                strengthFill.style.backgroundColor = '#f59e0b';
+                strengthFill.style.backgroundColor = '#f59e0b'; // Oramge 
                 strengthText.textContent = 'Medium';
                 strengthText.style.color = '#f59e0b';
             } else {
-                strengthFill.style.backgroundColor = '#4ade80';
+                strengthFill.style.backgroundColor = '#4ade80'; //Green
                 strengthText.textContent = 'Strong';
                 strengthText.style.color = '#4ade80';
             }
