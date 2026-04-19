@@ -1,90 +1,217 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const searchBtn = document.getElementById('searchBtn');
-    if (searchBtn) {
-        searchBtn.addEventListener('click', () => {
-            const val = document.getElementById('searchInput').value;
-            if(val) {
-                document.getElementById('statusText').innerText = `Searching for "${val}"...`;
-            } else {
-                alert("Please enter a book title or author.");
-            }
-        });
+
+const API_BASE = "" // same origin
+
+
+
+function saveToken(token) {
+  localStorage.setItem("token", token)
+}
+
+function getToken() {
+  return localStorage.getItem("token")
+}
+
+function logout() {
+  localStorage.removeItem("token")
+  window.location.href = "/login.html"
+}
+
+
+async function loginUser(event) {
+  event.preventDefault()
+
+  const username = document.getElementById("username").value
+  const password = document.getElementById("password").value
+
+  try {
+    const res = await fetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password })
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      alert(data.message)
+      return
     }
 
-    // ============ PASSWORD STRENGTH INDICATOR - ============
-    const passwordInput = document.getElementById('reg-password');
-    const registerBtn = document.getElementById('registerBtn');
+    saveToken(data.token)
+    alert("Login successful")
+    window.location.href = "/index.html"
 
-    if (passwordInput && registerBtn) {
-        const strengthFill = document.getElementById('strengthFill');
-        const strengthText = document.getElementById('strengthText');
+  } catch (err) {
+    console.error(err)
+    alert("Login failed")
+  }
+}
 
-        const reqLength = document.getElementById('req-length');
-        const reqUpper = document.getElementById('req-upper');
-        const reqLower = document.getElementById('req-lower');
-        const reqNumber = document.getElementById('req-number');
-        const reqSpecial = document.getElementById('req-special');
+// ===============================
+// REGISTER
+// ===============================
+async function registerUser(event) {
+  event.preventDefault()
 
-        passwordInput.addEventListener('input', () => {
-            const password = passwordInput.value;
+  const name = document.getElementById("name").value
+  const email = document.getElementById("email").value
+  const username = document.getElementById("username").value
+  const password = document.getElementById("password").value
 
-            // Check each requirement
-            const checks = {
-                length: password.length >= 8,
-                upper: /[A-Z]/.test(password),
-                lower: /[a-z]/.test(password),
-                number: /\d/.test(password),
-                special: /[\W_]/.test(password)
-            };
+  try {
+    const res = await fetch("/api/auth/register", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, username, password })
+    })
 
-            // Update checklist
-            updateRequirement(reqLength, checks.length);
-            updateRequirement(reqUpper, checks.upper);
-            updateRequirement(reqLower, checks.lower);
-            updateRequirement(reqNumber, checks.number);
-            updateRequirement(reqSpecial, checks.special);
+    const data = await res.json()
 
-            // Count requirements met
-            const metCount = Object.values(checks).filter(Boolean).length;
-            const allMet = metCount === 5;
-
-            // Update strength bar width
-            const percentage = (metCount / 5) * 100;
-            strengthFill.style.width = percentage + '%';
-
-            // Update color and text
-            if (metCount === 0) {
-                strengthFill.style.backgroundColor = '#2a2a2a'; //Dark Grey
-                strengthText.textContent = '';
-            } else if (metCount <= 2) {
-                strengthFill.style.backgroundColor = '#ef4444'; //red
-                strengthText.textContent = 'Weak';
-                strengthText.style.color = '#ef4444';
-            } else if (metCount <= 4) {
-                strengthFill.style.backgroundColor = '#f59e0b'; // Oramge 
-                strengthText.textContent = 'Medium';
-                strengthText.style.color = '#f59e0b';
-            } else {
-                strengthFill.style.backgroundColor = '#4ade80'; //Green
-                strengthText.textContent = 'Strong';
-                strengthText.style.color = '#4ade80';
-            }
-
-            // Enable button only when all requirements met
-            registerBtn.disabled = !allMet;
-        });
+    if (!res.ok) {
+      alert(data.message)
+      return
     }
 
-    function updateRequirement(element, isMet) {
-        if (!element) return;
-        const icon = element.querySelector('.req-icon');
-        if (isMet) {
-            element.classList.add('met');
-            icon.textContent = '✓';
-        } else {
-            element.classList.remove('met');
-            icon.textContent = '○';
-        }
-    }
+    alert("Account created! Please login.")
+    window.location.href = "/login.html"
 
-});
+  } catch (err) {
+    console.error(err)
+    alert("Registration failed")
+  }
+}
+
+// ===============================
+// LOAD BOOKS
+// ===============================
+async function loadBooks() {
+  const container = document.getElementById("booksContainer")
+  if (!container) return
+
+  const res = await fetch("/api/books")
+  const books = await res.json()
+
+  container.innerHTML = ""
+
+  books.forEach(book => {
+    const div = document.createElement("div")
+    div.className = "book-card"
+
+    div.innerHTML = `
+      <h3>${book.title}</h3>
+      <p>${book.author}</p>
+      <p>Available: ${book.available_copies}</p>
+      ${
+        book.available_copies > 0
+          ? `<button onclick="borrowBook(${book.book_id})">Borrow</button>`
+          : `<button disabled>Unavailable</button>`
+      }
+    `
+
+    container.appendChild(div)
+  })
+}
+
+// ===============================
+// BORROW
+// ===============================
+async function borrowBook(bookId) {
+  const token = getToken()
+
+  if (!token) {
+    alert("Please login first")
+    return
+  }
+
+  const res = await fetch("/api/borrow", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ book_id: bookId })
+  })
+
+  const data = await res.json()
+
+  if (!res.ok) {
+    alert(data.message)
+    return
+  }
+
+  alert("Book borrowed!")
+  loadBooks()
+  loadMyLoans()
+}
+
+// ===============================
+// LOAD LOANS
+// ===============================
+async function loadMyLoans() {
+  const container = document.getElementById("loansContainer")
+  if (!container) return
+
+  const token = getToken()
+  if (!token) return
+
+  const res = await fetch("/api/borrow/my", {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+
+  const loans = await res.json()
+
+  container.innerHTML = "<h2>My Loans</h2>"
+
+  loans.forEach(loan => {
+    const div = document.createElement("div")
+
+    div.innerHTML = `
+      <p>${loan.title} - ${loan.status}</p>
+      <p>Due: ${loan.due_date}</p>
+      ${
+        loan.status === "active"
+          ? `<button onclick="returnBook(${loan.transaction_id})">Return</button>`
+          : ""
+      }
+    `
+
+    container.appendChild(div)
+  })
+}
+
+// ===============================
+// RETURN
+// ===============================
+async function returnBook(transactionId) {
+  const token = getToken()
+
+  const res = await fetch("/api/borrow/return", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: JSON.stringify({ transaction_id: transactionId })
+  })
+
+  const data = await res.json()
+
+  if (!res.ok) {
+    alert(data.message)
+    return
+  }
+
+  alert("Returned!")
+  loadBooks()
+  loadMyLoans()
+}
+
+// ===============================
+// INIT
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  loadBooks()
+  loadMyLoans()
+})
