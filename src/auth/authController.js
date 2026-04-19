@@ -69,9 +69,9 @@ const login = async (req, res) => {
 
   try {
     const result = await pool.query(
-      'SELECT * FROM users WHERE username = $1',
-      [username]
-    );
+  'SELECT * FROM users WHERE username = $1 AND is_active = TRUE',
+  [username]
+);
 
     if (result.rows.length === 0) {
       return res.status(401).json({

@@ -24,6 +24,10 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config();
+if (!process.env.JWT_SECRET) {
+  console.log('Error: JWT_SECRET is not set in .env');
+  process.exit(1);
+}
 
 const authRoutes = require('../auth/authRoutes');
 const bookRoutes = require('./routes/books');
@@ -34,7 +38,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(express.json());
+app.use(express.json({ limit: '10kb' }));
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 // API Routes

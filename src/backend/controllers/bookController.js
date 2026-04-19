@@ -29,7 +29,11 @@
 const pool = require('../db');
 
 const getBooks = async (req, res) => {
-  const { search, available } = req.query;
+  const { search, available, genre, sort } = req.query;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const offset = (page - 1) * limit;  
+
   let query = 'SELECT * FROM books WHERE is_active = TRUE';
   const params = [];
 
@@ -40,12 +44,31 @@ const getBooks = async (req, res) => {
   if (available === 'true') {
     query += ' AND available_copies > 0';
   }
-  query += ' ORDER BY title ASC';
+  if (genre) {
+    params.push(genre);
+    query += ` AND genre = $${params.length}`;
+  }
+  // Sort options
+  if (sort === 'title_desc') {
+    query += ' ORDER BY title DESC';
+  } else if (sort === 'author_asc') {
+    query += ' ORDER BY author ASC';
+  } else if (sort === 'newest') {
+    query += ' ORDER BY created_at  DESC';
+  } else {
+    query += ' ORDER BY title ASC';
+  }
+
+  params.push(limit);
+  query += ` LIMIT $${params.length}`;
+  params.push(offset);
+  query += ` OFFSET $${params.length}`;
 
   try {
     const result = await pool.query(query, params);
     res.json(result.rows);
   } catch (err) {
+    console.error('getBooks error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -56,6 +79,7 @@ const getBookById = async (req, res) => {
     if (result.rows.length === 0) return res.status(404).json({ error: 'Book not found' });
     res.json(result.rows[0]);
   } catch (err) {
+    console.error('getBookById error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -72,6 +96,7 @@ const addBook = async (req, res) => {
     );
     res.status(201).json(result.rows[0]);
   } catch (err) {
+    console.error('addBook error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 };
@@ -86,6 +111,7 @@ const updateBook = async (req, res) => {
     if (result.rows.length === 0) return res.status(404).json({ error: 'Book not found' });
     res.json(result.rows[0]);
   } catch (err) {
+    console.error('updateBook error:', err);
     res.status(500).json({ error: 'Server error' });
   }
 };

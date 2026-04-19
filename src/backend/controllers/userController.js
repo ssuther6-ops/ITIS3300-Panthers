@@ -41,6 +41,15 @@ const getAllUsers = async (req, res) => {
 
 const deactivateUser = async (req, res) => {
   try {
+    if (req.user.id === parseInt(req.params.id)) {
+      return res.status(400).json({ error: 'You cannot deactivate your own account' });
+    }
+
+    const check = await pool.query('SELECT id FROM users WHERE id = $1', [req.params.id]);
+    if (check.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
     await pool.query('UPDATE users SET is_active = FALSE WHERE id = $1', [req.params.id]);
     res.json({ message: 'User deactivated' });
   } catch (err) {

@@ -45,9 +45,12 @@ const borrowBook = async (req, res) => {
   const { book_id } = req.body;
   const user_id = req.user.id;
 
-  const client = await pool.connect();
+ const client = await pool.connect();
 
   try {
+    await client.query('BEGIN');
+
+    // Check borrow limit 
     const activeLoans = await client.query(
       "SELECT COUNT(*) FROM borrowing_transactions WHERE user_id=$1 AND status='active'",
       [user_id]
@@ -55,19 +58,28 @@ const borrowBook = async (req, res) => {
     if (parseInt(activeLoans.rows[0].count) >= MAX_BORROW_LIMIT)
       return res.status(400).json({ error: `Borrow limit of ${MAX_BORROW_LIMIT} books reached` });
 
+    // Check if book exists and is available, inside transaction, no race
     const book = await client.query('SELECT * FROM books WHERE id=$1 AND is_active=TRUE', [book_id]);
-    if (book.rows.length === 0) return res.status(404).json({ error: 'Book not found' });
-    if (book.rows[0].available_copies < 1)
-      return res.status(400).json({ error: 'No copies available' });
+    if (book.rows.length === 0) {
+      await client.query('ROLLBACK');
+      return res.status(404).json({ error: 'Book not found' });
+    }
+    if (book.rows[0].available_copies < 1) {
+      await client.query('ROLLBACK');
+      return res.status(400).json({ error: 'No available copies' });
+    }
 
+    // Check user doesn't already have this book 
     const existing = await client.query(
       "SELECT * FROM borrowing_transactions WHERE user_id=$1 AND book_id=$2 AND status='active'",
       [user_id, book_id]
     );
-    if (existing.rows.length > 0)
+    if (existing.rows.length > 0) {
+      await client.query('ROLLBACK');
       return res.status(400).json({ error: 'You already have this book borrowed' });
-
-    await client.query('BEGIN');
+    }
+    
+    // Do the borrow 
     const tx = await client.query(
       'INSERT INTO borrowing_transactions (user_id, book_id) VALUES ($1,$2) RETURNING *',
       [user_id, book_id]
@@ -92,14 +104,17 @@ const returnBook = async (req, res) => {
   const client = await pool.connect();
 
   try {
+    await client.query('BEGIN');
+
     const tx = await client.query(
       "SELECT * FROM borrowing_transactions WHERE id=$1 AND user_id=$2 AND status='active'",
       [transaction_id, user_id]
     );
-    if (tx.rows.length === 0)
+   if (tx.rows.length === 0) {
+      await client.query('ROLLBACK');
       return res.status(404).json({ error: 'Active transaction not found' });
+    }
 
-    await client.query('BEGIN');
     await client.query(
       "UPDATE borrowing_transactions SET status='returned', returned_at=NOW() WHERE id=$1",
       [transaction_id]
@@ -120,7 +135,11 @@ const returnBook = async (req, res) => {
 const myBooks = async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT bt.id as transaction_id, b.title, b.author, bt.borrowed_at, bt.due_date, bt.status
+      `SELECT bt.id as transaction_id, b.title, b.author, bt.borrowed_at, bt.due_date, bt.returned_at,
+              CASE
+                WHEN bt.status = 'active' AND bt.due_date < NOW() THEN 'overdue'
+                ELSE bt.status
+              END AS status
        FROM borrowing_transactions bt
        JOIN books b ON bt.book_id = b.id
        WHERE bt.user_id=$1 ORDER BY bt.borrowed_at DESC`,
