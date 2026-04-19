@@ -1,60 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panthers Library - Catalog</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Panthers Library - Catalog</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header class="top-nav">
-        <h1 class="nav-logo">Panthers Library</h1>
-        <div class="nav-links">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="login.html" class="nav-link">Login</a>
-            <a href="register.html" class="nav-link gold-btn">Register</a>
-        </div>
-    </header>
-
-    <main class="center-content-column">
-        <div class="auth-container search-box">
-            <h2>Find a Book</h2>
-            <div class="search-group">
-                <input type="text" id="searchInput" placeholder="Search title, author, or ISBN...">
-                <button id="searchBtn">Search</button>
-            </div>
-            <p id="statusText">Search 5,000+ volumes in the Panther collection.</p>
-        </div>
-
- <section class="featured-section">
-    <h3 class="section-title">Staff Favorites</h3>
-    <div class="book-grid">
-        <div class="book-card">
-            <div class="book-placeholder">
-                <img src="https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg" alt="The Great Gatsby">
-            </div>
-            <h4>The Great Gatsby</h4>
-            <p>F. Scott Fitzgerald</p>
-        </div>
-        <div class="book-card">
-            <div class="book-placeholder">
-                <img src="https://covers.openlibrary.org/b/isbn/9780451524935-L.jpg" alt="1984">
-            </div>
-            <h4>1984</h4>
-            <p>George Orwell</p>
-        </div>
-        <div class="book-card">
-            <div class="book-placeholder">
-                <img src="https://covers.openlibrary.org/b/isbn/9780547928227-L.jpg" alt="The Hobbit">
-            </div>
-            <h4>The Hobbit</h4>
-            <p>J.R.R. Tolkien</p>
-        </div>
+  <header class="top-nav">
+    <h1 class="nav-logo">Panthers Library</h1>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">Home</a>
+      <a href="login.html" class="nav-link">Login</a>
+      <a href="register.html" class="nav-link gold-btn">Register</a>
+      <a href="#" class="nav-link" onclick="logout()">Logout</a>
     </div>
-</section>
+  </header>
 
-    </main>
+  <main class="center-content-column">
+    <div class="auth-container search-box">
+      <h2>Find a Book</h2>
+      <div class="search-group">
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search title, author, or ISBN..."
+        />
+        <button id="searchBtn" type="button">Search</button>
+      </div>
+      <p id="statusText">Search the Panther collection.</p>
+    </div>
 
-    <script src="main.js"></script>
+    <section class="featured-section">
+      <h3 class="section-title">Available Books</h3>
+      <div id="booksContainer" class="book-grid"></div>
+    </section>
+
+    <section class="featured-section" style="margin-top: 40px;">
+      <div id="loansContainer" class="auth-container" style="max-width: 1000px; text-align: left;">
+        <h2>My Loans</h2>
+        <p>Login to see your active and returned books.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
 </body>
 </html>
