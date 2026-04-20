@@ -135,7 +135,7 @@ async function borrowBook(bookId) {
   const data = await res.json()
 
   if (!res.ok) {
-    alert(data.message)
+    alert(data.error)
     return
   }
 
