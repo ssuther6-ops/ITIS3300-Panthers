@@ -215,3 +215,72 @@ document.addEventListener("DOMContentLoaded", () => {
   loadBooks()
   loadMyLoans()
 })
+
+// ===============================
+// SEARCH FUNCTIONALITY
+// ===============================
+async function handleSearch() {
+  const query = document.getElementById("searchInput").value;
+  const container = document.getElementById("booksContainer");
+  const statusText = document.getElementById("statusText");
+
+  if (!container) return;
+
+  // status feedback
+  statusText.innerText = query ? `Searching for "${query}"...` : "Loading all books...";
+
+  try {
+    // We use the search parameter your controller expects: ?search=
+    const res = await fetch(`/api/books?search=${encodeURIComponent(query)}`);
+    const books = await res.json();
+
+    container.innerHTML = "";
+
+    if (books.length === 0) {
+      container.innerHTML = "<p class='no-results'>No books found. Try a different title or author.</p>";
+      return;
+    }
+
+    books.forEach(book => {
+      const div = document.createElement("div");
+      div.className = "book-card";
+      div.innerHTML = `
+        <h3>${book.title}</h3>
+        <p><strong>Author:</strong> ${book.author}</p>
+        <p><strong>Genre:</strong> ${book.genre || 'General'}</p>
+        <p>Available: ${book.available_copies}</p>
+        ${
+          book.available_copies > 0
+            ? `<button class="gold-btn" onclick="borrowBook(${book.id})">Borrow</button>`
+            : `<button disabled>Unavailable</button>`
+        }
+      `;
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error("Search error:", err);
+    statusText.innerText = "Error fetching books.";
+  }
+}
+
+// ===============================
+// UPDATE INIT (DOMContentLoaded)
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+  loadBooks();
+  loadMyLoans();
+
+  // Add the click listener to your Search Button
+  const searchBtn = document.getElementById("searchBtn");
+  if (searchBtn) {
+    searchBtn.addEventListener("click", handleSearch);
+  }
+
+  // Allow pressing "Enter" to search too
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") handleSearch();
+    });
+  }
+});
