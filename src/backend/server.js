@@ -23,6 +23,7 @@
 
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
 require('dotenv').config();
 if (!process.env.JWT_SECRET) {
   console.log('Error: JWT_SECRET is not set in .env');
