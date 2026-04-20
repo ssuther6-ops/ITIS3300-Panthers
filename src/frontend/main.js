@@ -215,27 +215,3 @@ document.addEventListener("DOMContentLoaded", () => {
   loadBooks()
   loadMyLoans()
 })
-
-const registerUser = async (userData) => {
-    try {
-        const response = await fetch('http://localhost:3000/api/users/register', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData)
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            alert("Registration successful!");
-            window.location.href = 'login.html';
-        } else {
-            alert("Registration failed: " + data.message);
-        }
-    } catch (error) {
-        console.error("Error:", error);
-        alert("Registration failed. Is the server running on port 3000?");
-    }
-};
