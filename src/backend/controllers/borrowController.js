@@ -55,8 +55,11 @@ const borrowBook = async (req, res) => {
       "SELECT COUNT(*) FROM borrowing_transactions WHERE user_id=$1 AND status='active'",
       [user_id]
     );
-    if (parseInt(activeLoans.rows[0].count) >= MAX_BORROW_LIMIT)
-      return res.status(400).json({ error: `Borrow limit of ${MAX_BORROW_LIMIT} books reached` });
+    if (parseInt(activeLoans.rows[0].count) >= MAX_BORROW_LIMIT) {
+  await client.query('ROLLBACK');
+  client.release();
+  return res.status(400).json({ error: `Borrow limit of ${MAX_BORROW_LIMIT} books reached` });
+}
 
     // Check if book exists and is available, inside transaction, no race
     const book = await client.query('SELECT * FROM books WHERE id=$1 AND is_active=TRUE', [book_id]);
