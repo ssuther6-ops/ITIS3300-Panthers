@@ -33,7 +33,7 @@ async function loginUser(event) {
     const data = await res.json()
 
     if (!res.ok) {
-      alert(data.message)
+      alert(data.error)
       return
     }
 
@@ -68,7 +68,7 @@ async function registerUser(event) {
     const data = await res.json()
 
     if (!res.ok) {
-      alert(data.message)
+      alert(data.error)
       return
     }
 
@@ -103,7 +103,7 @@ async function loadBooks() {
       <p>Available: ${book.available_copies}</p>
       ${
         book.available_copies > 0
-          ? `<button onclick="borrowBook(${book.book_id})">Borrow</button>`
+          ? `<button onclick="borrowBook(${book.id})">Borrow</button>`
           : `<button disabled>Unavailable</button>`
       }
     `
@@ -199,7 +199,7 @@ async function returnBook(transactionId) {
   const data = await res.json()
 
   if (!res.ok) {
-    alert(data.message)
+    alert(data.error)
     return
   }
 
