@@ -105,7 +105,7 @@ const updateBook = async (req, res) => {
   const { title, author, isbn, genre } = req.body;
   try {
     const result = await pool.query(
-      'UPDATE books SET title=$1, author=$2, isbn=$3, genre=$4 WHERE id=$5 RETURNING *',
+      'UPDATE books SET title=$1, author=$2, isbn=$3, genre=$4 WHERE id=$5 AND is_active=TRUE RETURNING *',
       [title, author, isbn, genre, req.params.id]
     );
     if (result.rows.length === 0) return res.status(404).json({ error: 'Book not found' });
